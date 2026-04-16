@@ -1,6 +1,6 @@
 package src;
 
-class SimpleTask extends GettingTasks{
+class SimpleTask extends Task{
     public SimpleTask(){
         super("Simple Task");
     }
