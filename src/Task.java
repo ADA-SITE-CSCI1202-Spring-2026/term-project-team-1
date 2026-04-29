@@ -1,12 +1,15 @@
 package src;
 
-abstract class Task {
-    private String Name;
-    public Task(String Name){
-        this.Name = Name;
+public abstract class Task {
+    private String name;
+
+    public Task(String name){
+        this.name = name;
     }
+
     public String getName(){
-        return Name;
+        return name;
     }
+
     public abstract void execute(SystemLogManager logManager);
 }
