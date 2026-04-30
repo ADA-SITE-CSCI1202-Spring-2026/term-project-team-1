@@ -1,4 +1,4 @@
-package src.model;
+package model;
 
 public class Desserts extends MenuItem {
     private static final String[] NAMES = {"Ice Cream", "Pie"};
@@ -14,8 +14,8 @@ public class Desserts extends MenuItem {
     }
 
     @Override
-    void GetDetails(){
-        System.out.println("Dessert: " + name + ", Price: $" + price);
+    public String getDetails() {
+        return "Dessert: " + name + " ($" + price + ")";
     }
 
 }
