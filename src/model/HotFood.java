@@ -1,4 +1,4 @@
-package src.model;
+package model;
 
 import java.util.Random;
 
@@ -17,8 +17,7 @@ public class HotFood extends MenuItem {
     }
     
     @Override
-    void GetDetails() {
-        System.out.println("Hot Food: " + name + ", Price: $" + price);
-    }    
+    public String getDetails() {
+        return "Hot Food: " + name + " ($" + price + ")";
+    }
 }
-
