@@ -1,4 +1,4 @@
-package src.model;
+package model;
 
 abstract class MenuItem {
     protected String name;
@@ -9,6 +9,6 @@ abstract class MenuItem {
         this.price = price;
     }
     
-    abstract void GetDetails();
+    public abstract String getDetails();
 }
 
