@@ -21,4 +21,3 @@ public class HotFood extends MenuItem {
         return "Hot Food: " + name + " ($" + price + ")";
     }
 }
-
