@@ -1,6 +1,8 @@
 package model;
+import java.io.Serializable;
 
-abstract class MenuItem {
+abstract class MenuItem implements Serializable {
+    private static final long serialVersionUID=1L;
     protected String name;
     protected double price;
 
