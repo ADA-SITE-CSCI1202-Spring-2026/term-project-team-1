@@ -1,5 +1,6 @@
 package model;
 import java.io.Serializable;
+import java.util.Map;
 
 abstract class MenuItem implements Serializable {
     private static final long serialVersionUID=1L;
@@ -12,5 +13,9 @@ abstract class MenuItem implements Serializable {
     }
     
     public abstract String getDetails();
-}
+    public abstract Map<Ingredient, Integer> getRequiredIngredients();
 
+    public double getPrice() {
+        return price;
+    }
+}
