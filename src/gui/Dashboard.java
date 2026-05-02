@@ -4,6 +4,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.util.Duration;
 
@@ -25,11 +27,24 @@ public class Dashboard {
     @FXML 
     private Button cookNextOrderButton;
 
+    @FXML
+    private ComboBox<Ingredient> ingredientComboBox;
+
+    @FXML
+    private Button buyIngredientButton;
+
+    @FXML
+    private Label selectedIngredientAmountLabel;
+
+    @FXML
+    private Label budgetLabel;
+
     private InventoryManager inventoryManager = new InventoryManager(100);
 
     @FXML
     public void initialize() {
         startTimer();
+        setupRestockPanel();
 
         cookNextOrderButton.setOnAction(e -> {
         Order order = orderQueue.poll();
@@ -50,6 +65,35 @@ public class Dashboard {
         //setupCookButton();
         updateInventoryUI();
     });
+    }
+
+    private void setupRestockPanel() {
+        ingredientComboBox.getItems().addAll(Ingredient.values());
+        ingredientComboBox.getSelectionModel().selectFirst();
+
+        ingredientComboBox.setOnAction(e -> updateInventoryUI());
+        buyIngredientButton.setOnAction(e -> buySelectedIngredient());
+
+        updateInventoryUI();
+    }
+
+    private void buySelectedIngredient() {
+        Ingredient ingredient = ingredientComboBox.getValue();
+
+        if (ingredient == null) {
+            logListView.getItems().add("Select an ingredient to buy.");
+            return;
+        }
+
+        boolean bought = inventoryManager.buyIngredient(ingredient);
+
+        if (bought) {
+            logListView.getItems().add("Bought ingredient: " + ingredient);
+        } else {
+            logListView.getItems().add("Not enough cash to buy: " + ingredient);
+        }
+
+        updateInventoryUI();
     }
 
     private void startTimer() {
@@ -92,6 +136,12 @@ public class Dashboard {
     }
 
     private void updateInventoryUI() {
-        // This method can be used to update any inventory-related UI elements
+        Ingredient ingredient = ingredientComboBox.getValue();
+
+        if (ingredient != null) {
+            selectedIngredientAmountLabel.setText("In stock: " + inventoryManager.getAmount(ingredient));
+        }
+
+        budgetLabel.setText(String.format("Cash: $%.2f", inventoryManager.getTotalBudget()));
     }
 }

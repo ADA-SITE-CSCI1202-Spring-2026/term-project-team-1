@@ -19,6 +19,23 @@ public class InventoryManager {
         return ingredients.getOrDefault(ingredient, 0);
     }
 
+    public double getTotalBudget() {
+        return totalBudget;
+    }
+
+    public boolean buyIngredient(Ingredient ingredient) {
+        double price = ingredient.getIngredientPrice();
+
+        if (totalBudget < price) {
+            return false;
+        }
+
+        ingredients.put(ingredient, getAmount(ingredient) + 1);
+        totalBudget -= price;
+
+        return true;
+    }
+
     public boolean hasEnough(Order order) {
         HashMap<Ingredient, Integer> totalNeeded = new HashMap<>();
         
