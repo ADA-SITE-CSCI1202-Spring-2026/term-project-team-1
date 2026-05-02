@@ -3,6 +3,7 @@ package gui;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.util.Duration;
 
@@ -21,9 +22,34 @@ public class Dashboard {
     private Deque<Order> orderQueue = new ArrayDeque<>();
     private Random rand = new Random();
 
+    @FXML 
+    private Button cookNextOrderButton;
+
+    private InventoryManager inventoryManager = new InventoryManager(100);
+
     @FXML
     public void initialize() {
         startTimer();
+
+        cookNextOrderButton.setOnAction(e -> {
+        Order order = orderQueue.poll();
+
+        if (order == null) {
+            logListView.getItems().add("No orders to cook.");
+            return;
+        }
+
+        boolean cooked = inventoryManager.cookOrder(order);
+
+        if (cooked) {
+            logListView.getItems().add("Cooked order: $" + order.getTotalPrice());
+        } else {
+            logListView.getItems().add("Rejected order: not enough ingredients.");
+        }
+
+        //setupCookButton();
+        updateInventoryUI();
+    });
     }
 
     private void startTimer() {
@@ -63,5 +89,9 @@ public class Dashboard {
         logListView.getItems().add(
             "New order added. Items: " + order.getItemCount()
         );
+    }
+
+    private void updateInventoryUI() {
+        // This method can be used to update any inventory-related UI elements
     }
 }
