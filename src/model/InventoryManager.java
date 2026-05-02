@@ -19,6 +19,32 @@ public class InventoryManager {
         return ingredients.getOrDefault(ingredient, 0);
     }
 
+    public double getTotalBudget() {
+        return totalBudget;
+    }
+
+    public HashMap<Ingredient, Integer> getIngredientsCopy() {
+        return new HashMap<>(ingredients);
+    }
+
+    public void loadState(HashMap<Ingredient, Integer> ingredients, double totalBudget) {
+        this.ingredients = new HashMap<>(ingredients);
+        this.totalBudget = totalBudget;
+    }
+
+    public boolean buyIngredient(Ingredient ingredient) {
+        double price = ingredient.getIngredientPrice();
+
+        if (totalBudget < price) {
+            return false;
+        }
+
+        ingredients.put(ingredient, getAmount(ingredient) + 1);
+        totalBudget -= price;
+
+        return true;
+    }
+
     public boolean hasEnough(Order order) {
         HashMap<Ingredient, Integer> totalNeeded = new HashMap<>();
         

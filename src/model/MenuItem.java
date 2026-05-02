@@ -2,7 +2,7 @@ package model;
 import java.io.Serializable;
 import java.util.Map;
 
-abstract class MenuItem implements Serializable {
+public abstract class MenuItem implements Serializable {
     private static final long serialVersionUID=1L;
     protected String name;
     protected double price;
@@ -17,5 +17,9 @@ abstract class MenuItem implements Serializable {
 
     public double getPrice() {
         return price;
+    }
+
+    public String getName() {
+        return name;
     }
 }
