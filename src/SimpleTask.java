@@ -6,7 +6,7 @@ class SimpleTask extends Task{
     }
     @Override
     public void execute(SystemLogManager logManager){
-        LogManager.logInfo("Executing Simple Task");
-        LogManager.logSuccess("Simple Task Completed");
+        logManager.logInfo("Executing Simple Task");
+        logManager.logSuccess("Simple Task Completed");
     }
 }
