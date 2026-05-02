@@ -23,6 +23,12 @@ public class Dashboard {
     @FXML
     private ListView<String> logListView;
 
+    @FXML
+    private ListView<String> inventoryListView;
+
+    @FXML
+    private Label inventoryCashLabel;
+
     private Deque<Order> orderQueue = new ArrayDeque<>();
     private Random rand = new Random();
     private List<IAppliance> appliances = List.of(
@@ -216,5 +222,14 @@ public class Dashboard {
         }
 
         budgetLabel.setText(String.format("Cash: $%.2f", inventoryManager.getTotalBudget()));
+        inventoryCashLabel.setText(String.format("Money: $%.2f", inventoryManager.getTotalBudget()));
+
+        inventoryListView.getItems().clear();
+
+        for (Ingredient currentIngredient : Ingredient.values()) {
+            inventoryListView.getItems().add(
+                currentIngredient + ": " + inventoryManager.getAmount(currentIngredient)
+            );
+        }
     }
 }
