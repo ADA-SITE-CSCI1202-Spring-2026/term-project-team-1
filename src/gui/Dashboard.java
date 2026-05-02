@@ -11,6 +11,8 @@ import javafx.util.Duration;
 
 import model.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class Dashboard {
@@ -33,6 +35,12 @@ public class Dashboard {
     private Button cookNextOrderButton;
 
     @FXML
+    private Button saveButton;
+
+    @FXML
+    private Button loadButton;
+
+    @FXML
     private ComboBox<Ingredient> ingredientComboBox;
 
     @FXML
@@ -44,12 +52,15 @@ public class Dashboard {
     @FXML
     private Label budgetLabel;
 
+    private static final File SAVE_FILE = new File(GameState.SAVE_FILE);
+
     private InventoryManager inventoryManager = new InventoryManager(100);
 
     @FXML
     public void initialize() {
         startTimer();
         setupRestockPanel();
+        setupSaveLoadButtons();
 
         cookNextOrderButton.setOnAction(e -> {
         Order order = orderQueue.poll();
@@ -71,6 +82,49 @@ public class Dashboard {
         //setupCookButton();
         updateInventoryUI();
     });
+    }
+
+    private void setupSaveLoadButtons() {
+        saveButton.setOnAction(e -> saveGame());
+        loadButton.setOnAction(e -> loadGame());
+    }
+
+    private void saveGame() {
+        GameState gameState = new GameState(
+            new ArrayDeque<>(orderQueue),
+            inventoryManager.getIngredientsCopy(),
+            inventoryManager.getTotalBudget()
+        );
+
+        try {
+            gameState.saveGame(SAVE_FILE);
+            logListView.getItems().add("Game saved.");
+        } catch (IOException ex) {
+            logListView.getItems().add("ERROR: Could not save game.");
+        }
+    }
+
+    private void loadGame() {
+        try {
+            GameState gameState = GameState.loadGame(SAVE_FILE);
+
+            orderQueue = new ArrayDeque<>(gameState.getOrders());
+            inventoryManager.loadState(gameState.getIngredients(), gameState.getTotalBudget());
+
+            refreshOrderList();
+            updateInventoryUI();
+            logListView.getItems().add("Game loaded.");
+        } catch (IOException | IllegalArgumentException ex) {
+            logListView.getItems().add("ERROR: Could not load game.");
+        }
+    }
+
+    private void refreshOrderList() {
+        orderListView.getItems().clear();
+
+        for (Order order : orderQueue) {
+            orderListView.getItems().add(order.toString());
+        }
     }
 
     private void processOrderWithAppliances(Order order) {

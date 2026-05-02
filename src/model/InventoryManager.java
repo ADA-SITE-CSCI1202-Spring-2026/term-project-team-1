@@ -23,6 +23,15 @@ public class InventoryManager {
         return totalBudget;
     }
 
+    public HashMap<Ingredient, Integer> getIngredientsCopy() {
+        return new HashMap<>(ingredients);
+    }
+
+    public void loadState(HashMap<Ingredient, Integer> ingredients, double totalBudget) {
+        this.ingredients = new HashMap<>(ingredients);
+        this.totalBudget = totalBudget;
+    }
+
     public boolean buyIngredient(Ingredient ingredient) {
         double price = ingredient.getIngredientPrice();
 
