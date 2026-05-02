@@ -23,6 +23,11 @@ public class Dashboard {
 
     private Deque<Order> orderQueue = new ArrayDeque<>();
     private Random rand = new Random();
+    private List<IAppliance> appliances = List.of(
+        new Grill(),
+        new DrinkDispenser(),
+        new DessertStation()
+    );
 
     @FXML 
     private Button cookNextOrderButton;
@@ -57,6 +62,7 @@ public class Dashboard {
         boolean cooked = inventoryManager.cookOrder(order);
 
         if (cooked) {
+            processOrderWithAppliances(order);
             logListView.getItems().add("Cooked order: $" + order.getTotalPrice());
         } else {
             logListView.getItems().add("Rejected order: not enough ingredients.");
@@ -65,6 +71,19 @@ public class Dashboard {
         //setupCookButton();
         updateInventoryUI();
     });
+    }
+
+    private void processOrderWithAppliances(Order order) {
+        for (MenuItem item : order.getItems()) {
+            for (IAppliance appliance : appliances) {
+                String result = appliance.process(item);
+
+                if (result != null) {
+                    logListView.getItems().add(result);
+                    break;
+                }
+            }
+        }
     }
 
     private void setupRestockPanel() {
