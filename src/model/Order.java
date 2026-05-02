@@ -34,4 +34,12 @@ public class Order implements Serializable{
         
         return sb.toString();
     }
+
+    public double getTotalPrice() {
+        double total = 0;
+        for (MenuItem item : items) {
+            total += item.getPrice();
+        }
+        return total;
+    }
 }
