@@ -7,6 +7,7 @@ import java.util.List;
 public class SystemLogManager {
     private final List<String> logs;
     private final DateTimeFormatter timeFormatter;
+    private static final int MAX_LOGS = 100;
 
     public SystemLogManager(){
         logs = new ArrayList<>();
@@ -25,14 +26,19 @@ public class SystemLogManager {
     private void addLog(String type , String message){
         String time = LocalTime.now().format(timeFormatter);
         String logMessage = "[" + time + "] [" + type + "] " + message;
+        if(logs.size() >= MAX_LOGS){
+            logs.remove(0);
+        }
         logs.add(logMessage);
     }
 
     public List<String> getLogs(){
         return new ArrayList<>(logs);
     }
-
     public String getAllLogsAsText(){
         return String.join("\n", logs);
+    }
+    public void clearLogs(){
+        logs.clear();
     }
 }
