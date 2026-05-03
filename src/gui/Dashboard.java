@@ -62,6 +62,8 @@ public class Dashboard {
 
     private InventoryManager inventoryManager = new InventoryManager(100);
 
+    private int nextId = 1;
+
     @FXML
     public void initialize() {
         startTimer();
@@ -75,6 +77,8 @@ public class Dashboard {
             logListView.getItems().add("No orders to cook.");
             return;
         }
+
+        orderListView.getItems().remove(0);
 
         boolean cooked = inventoryManager.cookOrder(order);
 
@@ -186,6 +190,9 @@ public class Dashboard {
 
     private void generateOrder() {
         Order order = new Order();
+
+        order.setId(nextId);
+        nextId++;
 
         int itemCount = rand.nextInt(3) + 1;
 

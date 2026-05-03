@@ -8,9 +8,18 @@ public class Order implements Serializable{
 
     private static final long serialVersionUID=1L;
     private List<MenuItem> items;
+    private int id;
 
     public Order() {
         items = new ArrayList<>();
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void addItem(MenuItem item) {
@@ -27,11 +36,12 @@ public class Order implements Serializable{
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Order:\n");
+        StringBuilder sb = new StringBuilder("Order#" + id + ":\n");
         for (MenuItem item : items) {
             sb.append(item.getDetails()).append("\n");
         }
         
+        sb.append("Total price: $" + getTotalPrice());
         return sb.toString();
     }
 
