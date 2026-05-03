@@ -60,6 +60,8 @@ public class Dashboard {
 
     private static final File SAVE_FILE = new File(GameState.SAVE_FILE);
 
+    private static final int max_display = 7;
+
     private InventoryManager inventoryManager = new InventoryManager(100);
 
     private int nextId = 1;
@@ -79,6 +81,10 @@ public class Dashboard {
         }
 
         orderListView.getItems().remove(0);
+            if (orderQueue.size() >= max_display) {
+                Order nextOrder = new ArrayList<>(orderQueue).get(max_display - 1);
+                orderListView.getItems().add(nextOrder.toString());
+            }
 
         boolean cooked = inventoryManager.cookOrder(order);
 
@@ -214,7 +220,9 @@ public class Dashboard {
     }
 
     private void updateUI(Order order) {
-        orderListView.getItems().add(order.toString());
+        if (orderListView.getItems().size() < max_display) {
+            orderListView.getItems().add(order.toString());
+        }
 
         logListView.getItems().add(
             "New order added. Items: " + order.getItemCount()
